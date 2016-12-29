@@ -1,0 +1,30 @@
+
+
+<form method="POST" action='/ocr'>
+  <div>
+    <input type="text" name="image_url" placeholder="enter an image url..." required></center>
+  </div>
+  <input type="submit" value="submit" />
+</form>
+
+<div>
+  <h1>Results = {{output}}</h1>
+  <div ></div>
+</div>
+
+<br><br>
+
+<form method="POST" action='/ocr'>
+  <div>
+    <input type="file" name="image_pile" placeholder="upload an image from system..." required></center>
+  </div>
+  <input type="submit" value="submit" />
+</form>
+
+<div id="results">
+  <h1>Results {{output}}</h1>
+  <div id="results-data"></div>
+</div>
+
+<div id="retry"><a href="/">Again?</a></div>
+
