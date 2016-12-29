@@ -12,4 +12,10 @@ def process_image_from_url(url):
 
 def process_image_from_path(path):
     image = Image.open(path)
+    image.filter(ImageFilter.SHARPEN)
+    return pytesseract.image_to_string(image)
+
+def process_image_from_file(file):
+    image = Image.open(file)
+    image.filter(ImageFilter.SHARPEN)
     return pytesseract.image_to_string(image)
