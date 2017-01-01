@@ -3,7 +3,7 @@
 import os
 from flask import Flask, render_template, request
 
-from ocr import process_image_from_url, process_image_from_file
+from ocr import process_image_from_url, process_image_from_file, clean
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
@@ -14,8 +14,7 @@ ALLOWED_EXT = set(['jpg'])
 def allowed_file(filename):
         return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
 
-def clean(str):
-    return str.strip().replace(" ","").replace("\n", "")
+
 
 
 @app.route('/')
@@ -52,7 +51,7 @@ def ocr_file():
 
         if file and allowed_file(file.filename):
             output = process_image_from_file(file)
-
+            print output
             return render_template('index.html', file_output=clean(output))
         else:
             return internal_error('only jpg pls')

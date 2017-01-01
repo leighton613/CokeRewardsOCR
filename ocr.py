@@ -4,6 +4,8 @@ from PIL import Image
 from PIL import ImageFilter
 from StringIO import StringIO
 
+def clean(str):
+    return str.strip().replace(" ","").replace("\n", "")
 
 def process_image_from_url(url):
     image = Image.open(StringIO(urllib.urlopen(url).read()))
