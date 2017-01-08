@@ -5,7 +5,7 @@ import numpy as np
 import cv2
 
 # reference: http://stackoverflow.com/a/23556997
-def circle2binary(img_name, text_max=250, text_min=100, px_threshold=100,
+def circle2binary(img_name, drive='./test_image/', text_max=250, text_min=100, px_threshold=100,
                 dilate_iter=23, debug=True):
     """
     From cap circle detect and locate text region, and convert to binary img
@@ -18,7 +18,7 @@ def circle2binary(img_name, text_max=250, text_min=100, px_threshold=100,
     :r: void
     """
     # open img
-    img = cv2.imread('./test image/'+img_name)
+    img = cv2.imread(drive+img_name)
 
 
     # preprocessing (threshold + dilate)
