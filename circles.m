@@ -22,8 +22,7 @@ viscircles(centers1, radii1, 'EdgeColor', 'b');
 % [centers4, radii4] = imfindcircles(rgb,[750 850],'ObjectPolarity',...
 %     'dark','Sensitivity',sentivity, 'EdgeThreshold',edge_th);
 pause;
-%%
-% crop inside
+%% crop inside
 mask_in = uint8((xx.^2 + yy.^2)<ci(3)^2);
 croppedIn = uint8(zeros(size(rgb)));
 for i=1:3

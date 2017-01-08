@@ -1,8 +1,8 @@
 
 from matplotlib import pyplot as plt
 import copy
+import numpy as np
 import cv2
-# %matplotlib inline
 
 # reference: http://stackoverflow.com/a/23556997
 def circle2binary(img_name, text_max=250, text_min=100, px_threshold=100,
@@ -27,18 +27,40 @@ def circle2binary(img_name, text_max=250, text_min=100, px_threshold=100,
     kernel = cv2.getStructuringElement(cv2.MORPH_CROSS, (3,3))
     dilated = cv2.dilate(img_threshold, kernel, iterations=dilate_iter)
 
-
     # find contour
     dilated2 = copy.copy(dilated)
     _, contours, hierarchy = cv2.findContours(dilated2, cv2.RETR_EXTERNAL,
                                               cv2.CHAIN_APPROX_TC89_KCOS)
+    def adp_enhance(gray):
+        """
+        control mean to be within 190-210, 200
+        """
+        enhance_threshold = 100
 
-    def enhance(gray, threshold=100):
-        """
-        White bg, black text
-        """
-        _, im_threshold = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
+        def enhance(gray, threshold=enhance_threshold):
+            """
+            White bg, black text
+            """
+            _, im_threshold = cv2.threshold(gray, threshold, 255, cv2.THRESH_BINARY)
+            mean = np.mean(im_threshold)
+            return mean, im_threshold
+        
+
+        flag = 1
+        while flag:
+            mean, im_threshold = enhance(gray, threshold=enhance_threshold)
+            diff = mean - 195 # empirical value
+            if abs(diff) <= 3: break
+            elif mean > 0:     # should increase threshold
+                enhance_threshold += 1
+            else:
+                enhance_threshold -= 1
         return im_threshold
+            
+            
+    
+    
+
 
 
     # filter contours and plot
@@ -54,7 +76,7 @@ def circle2binary(img_name, text_max=250, text_min=100, px_threshold=100,
         num_cnt += 1
         cv2.rectangle(img, (x, y), (x+w, y+h), (255,0,255), 2)
         output_name = './test image/'+ img_name.split('.')[0] + '-'+ str(num_cnt) + '.jpg'
-        flag *= cv2.imwrite(output_name, enhance(gray[y:y+h, x:x+w]))
+        flag *= cv2.imwrite(output_name, adp_enhance(gray[y:y+h, x:x+w]))
 
 
     # write
