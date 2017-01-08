@@ -6,8 +6,9 @@ Recognize coke rewards code and redeem
 - [x] Image pre-processing (text detection and localization) for ocr
  - [x] red-bottle-cap code
  - [ ] paper-box code
-- [ ] OCR tuned for whitelist (A-Z0-9)
+- [x] Tesseract OCR tuned for whitelist (A-Z0-9)
 - [ ] Be able to connect on mycokerewards.com
+- [ ] Refine ocr part for better performance
 
 ## Usage
 - Clone 
