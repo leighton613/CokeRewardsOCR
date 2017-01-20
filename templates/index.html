@@ -1,6 +1,7 @@
 
 {{error}}
 <center>
+  <h1>Step I. Recognize Here:</h1>
 <form method="POST" action='/ocrURL'>
   <div>
     <input type="text" name="image_url" placeholder="enter an image url..." required/>
@@ -10,7 +11,7 @@
 
 <div>
   <div><img src={{url}}  alt="input url image" height="300" /></div>
-  <h1>Results: {{url_output}}</h1>
+  <h3>Results: {{url_output}}</h3>
   <div ></div>
 </div>
 
@@ -24,9 +25,24 @@
 </form>
 
 <div id="results">
-  <h1>Results {{file_output}}</h1>
+  <h3>Results: {{file_output}}</h3>
   <div></div>
 </div>
+
+  <div>
+    <h1>Step II. Redeem Here:</h1>
+    <form method="POST" action='/redeemCode'>
+      <div><input type="email" name="my_email" placeholder="Email" required/></div>
+      <div><input type="password" name="my_pwd" placeholder="Password" required/></div>
+      <div><input type="text" name="my_code" value="{{pred_code}}" placeholder="{{pred_code}}" required/></div>
+      <input type="submit" value="redeem" />
+    </form>
+    <h3>Redeem results:</h3>
+    <p>{{msg}}</p>
+
+
+  </div>
+
 </center>
 
 

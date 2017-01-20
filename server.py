@@ -4,9 +4,11 @@ import os
 from flask import Flask, render_template, request
 
 from ocr import process_image_from_url, process_image_from_file, clean
+from redeem import driver_redeem
 
 
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+stat_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 app = Flask(__name__, template_folder = tmpl_dir)
 _VERSION = 1
 
@@ -20,7 +22,7 @@ def allowed_file(filename):
 @app.route('/')
 def main():
     print 'home page'
-    return render_template('index.html')
+    return render_template('index.html', url="./static/default.jpg")
 
 
 
@@ -58,6 +60,18 @@ def ocr_file():
 
     return render_template('index.html')
 
+@app.route('/redeemCode', methods=["GET", "POST"])
+def redeem():
+    my_email = str(request.form["my_email"])
+    my_pwd = str(request.form["my_pwd"])
+    my_code = str(request.form["my_code"])
+    flag, feedback = driver_redeem(my_email, my_pwd, my_code)
+    msg = "Current Points: {} | After Redeem Points: {}\n".format(feedback["current_point"], feedback["after_point"])
+    if not flag:
+        msg += feedback["redeem_error"]
+    else:
+        msg += feedback["redeem_success"]
+    return render_template("index.html", msg=msg)
 
 @app.errorhandler(500)
 def internal_error(error):
