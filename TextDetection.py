@@ -5,20 +5,21 @@ import numpy as np
 import cv2
 
 # reference: http://stackoverflow.com/a/23556997
-def circle2binary(img_name, drive='./test_image/', text_max=250, text_min=100, px_threshold=100,
+def circle2binary(img_name, drive='test_image', text_max=250, text_min=100, px_threshold=100,
                 dilate_iter=23, debug=True):
     """
-    From cap circle detect and locate text region, and convert to binary img
-    img_name     :: str  :: source file
-    text_max     :: int  :: max height of a character
-    text_min     :: int  :: min width of a character
-    px_threshold :: int  :: pixel value to detect
-    dilate_iter  :: int  :: iteration number of dilate
-    debug        :: bool :: True then plot process
-    :r: void
+    Text detection and localization.
+    :param img_name: str
+    :param drive: str, default 'text_image'
+    :param text_max: int, default 250
+    :param text_min: int, default 100
+    :param px_threshold: int, default 100
+    :param dilate_iter: int, default 23
+    :param debug: bool, default True
+    :return: list[str], list of output file names
     """
     # open img
-    img = cv2.imread(drive+img_name)
+    img = cv2.imread(drive+'/'+img_name)
 
 
     # preprocessing (threshold + dilate)
@@ -56,10 +57,6 @@ def circle2binary(img_name, drive='./test_image/', text_max=250, text_min=100, p
             else:
                 enhance_threshold -= 1
         return im_threshold
-            
-            
-    
-    
 
 
 
@@ -76,14 +73,14 @@ def circle2binary(img_name, drive='./test_image/', text_max=250, text_min=100, p
 
         num_cnt += 1
         cv2.rectangle(img, (x, y), (x+w, y+h), (255,0,255), 2)
-        output_name = './test image/'+ img_name.split('.')[0] + '-'+ str(num_cnt) + '.jpg'
+        output_name = drive + '/' + img_name.split('.')[0] + '-'+ str(num_cnt) + '.jpg'
         output_list.append(output_name)
         flag *= cv2.imwrite(output_name, adp_enhance(gray[y:y+h, x:x+w]))
 
 
     # write
     print 'Num of contours found:', num_cnt
-    output_name = './test image/'+img_name.split('.')[0]+'-td.jpg'
+    output_name = drive + '/' +img_name.split('.')[0]+'-td.jpg'
     flag *= cv2.imwrite(output_name, img)
 
 

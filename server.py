@@ -10,11 +10,12 @@ from redeem import driver_redeem
 tmpl_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
 stat_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
 app = Flask(__name__, template_folder = tmpl_dir)
+app.config['UPLOAD_FOLDER']='uploads'
 _VERSION = 1
 
 ALLOWED_EXT = set(['jpg'])
 def allowed_file(filename):
-        return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXT
+        return '.' in filename and filename.rsplit('.', 1)[-1].lower() in ALLOWED_EXT
 
 
 
@@ -33,12 +34,16 @@ def ocr_url():
         url = str(request.form['image_url'])
         print 'url:', url
 
-        if url:
-            if 'jpg' in url:
-                output = process_image_from_url(url)
-                return render_template('index.html', url_output=clean(output), url=url)
-            else:
-                return internal_error('only jpg pls')
+        if url and allowed_file(url):
+            filename = "temp_url"
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+
+            output = preprocess_ocr(filename)
+
+
+            return render_template('index.html', url_output=clean(output), url=url)
+
 
     return render_template('index.html')
 
@@ -48,12 +53,19 @@ def ocr_file():
     if request.method == "POST":
         print len(request.files)
         file = request.files['image_file']
-        print type(file)
-        print file.content_type
+        # print type(file)
+        # print file.content_type
 
         if file and allowed_file(file.filename):
-            output = process_image_from_file(file)
-            print output
+            # save the file
+            filename = file.filename
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+            # preprocess the file
+            # TODO
+            output = preprocess_ocr(filename)
+
+            # print output
             return render_template('index.html', file_output=clean(output))
         else:
             return internal_error('only jpg pls')
