@@ -65,6 +65,7 @@ def circle2binary(img_name, drive='./test_image/', text_max=250, text_min=100, p
 
     # filter contours and plot
     num_cnt = 0
+    output_list = []
     flag = True
     for cnt in contours:
         # get rectagular bounding contour
@@ -76,6 +77,7 @@ def circle2binary(img_name, drive='./test_image/', text_max=250, text_min=100, p
         num_cnt += 1
         cv2.rectangle(img, (x, y), (x+w, y+h), (255,0,255), 2)
         output_name = './test image/'+ img_name.split('.')[0] + '-'+ str(num_cnt) + '.jpg'
+        output_list.append(output_name)
         flag *= cv2.imwrite(output_name, adp_enhance(gray[y:y+h, x:x+w]))
 
 
@@ -99,4 +101,6 @@ def circle2binary(img_name, drive='./test_image/', text_max=250, text_min=100, p
         plt.title("dilated")
         plt.imshow(dilated, cmap='gray')
 
-    return flag
+    if not flag: return flag
+    else:
+        return output_list
