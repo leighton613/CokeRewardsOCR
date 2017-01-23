@@ -5,12 +5,11 @@ import numpy as np
 import cv2
 
 # reference: http://stackoverflow.com/a/23556997
-def circle2binary(img_name, drive='test_image', text_max=250, text_min=100, px_threshold=100,
+def circle2binary(img_name, text_max=250, text_min=100, px_threshold=100,
                 dilate_iter=23, debug=True):
     """
     Text detection and localization.
     :param img_name: str
-    :param drive: str, default 'text_image'
     :param text_max: int, default 250
     :param text_min: int, default 100
     :param px_threshold: int, default 100
@@ -19,7 +18,7 @@ def circle2binary(img_name, drive='test_image', text_max=250, text_min=100, px_t
     :return: list[str], list of output file names
     """
     # open img
-    img = cv2.imread(drive+'/'+img_name)
+    img = cv2.imread(img_name)
 
 
     # preprocessing (threshold + dilate)
@@ -73,14 +72,14 @@ def circle2binary(img_name, drive='test_image', text_max=250, text_min=100, px_t
 
         num_cnt += 1
         cv2.rectangle(img, (x, y), (x+w, y+h), (255,0,255), 2)
-        output_name = drive + '/' + img_name.split('.')[0] + '-'+ str(num_cnt) + '.jpg'
+        output_name = img_name.rsplit('.', 1)[0] + '-'+ str(num_cnt) + '.jpg'
         output_list.append(output_name)
         flag *= cv2.imwrite(output_name, adp_enhance(gray[y:y+h, x:x+w]))
 
 
     # write
     print 'Num of contours found:', num_cnt
-    output_name = drive + '/' +img_name.split('.')[0]+'-td.jpg'
+    output_name = img_name.rsplit('.', 1)[0]+'-td.jpg'
     flag *= cv2.imwrite(output_name, img)
 
 

@@ -1,7 +1,6 @@
 function new_filename = circle_crop(filename)
-% Author % leighton.zxw@gmail.com
+%% Author: leighton.zxw@gmail.com
 
-% rgb = imread('test_image/cap1.jpg');
 rgb = imread(filename);
 
 % figure(1); subplot(131); imshow(rgb);
@@ -14,7 +13,9 @@ edge_th = 0.05;
 [centers1, radii1] = imfindcircles(rgb,[450 550],'ObjectPolarity',...
     'dark','Sensitivity',sentivity, 'EdgeThreshold',edge_th);
 
-viscircles(centers1, radii1, 'EdgeColor', 'b');
+% visualization:
+% viscircles(centers1, radii1, 'EdgeColor', 'b');
+
 % [centers2, radii2] = imfindcircles(rgb,[550 650],'ObjectPolarity',...
 %     'dark','Sensitivity',sentivity, 'EdgeThreshold',edge_th);
 % 

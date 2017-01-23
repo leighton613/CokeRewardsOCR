@@ -45,7 +45,7 @@ def sign_in(driver, user_email, user_pwd):
     pwd = driver.find_element_by_name("traditionalSignIn_password")
     email.send_keys(user_email)
     pwd.send_keys(user_pwd)
-    button = driver.find_element_by_name("traditionalSignIn_signInButton")\
+    button = driver.find_element_by_name("traditionalSignIn_signInButton")
     button.click()
     page_waiter(driver, "enterCodeField", msg="Ready to redeem...")
     

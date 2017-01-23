@@ -3,7 +3,7 @@
 import os
 from flask import Flask, render_template, request
 
-from ocr import process_image_from_url, process_image_from_file, clean
+from ocr import process_image_from_file
 from redeem import driver_redeem
 
 
@@ -38,11 +38,11 @@ def ocr_url():
             filename = "temp_url"
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+            # process the file
+            output = process_image_from_file(filename, folder=app.config['UPLOAD_FOLDER'])
 
-            output = preprocess_ocr(filename)
 
-
-            return render_template('index.html', url_output=clean(output), url=url)
+            return render_template('index.html', url_output=output, url=url)
 
 
     return render_template('index.html')
@@ -61,12 +61,11 @@ def ocr_file():
             filename = file.filename
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
-            # preprocess the file
-            # TODO
-            output = preprocess_ocr(filename)
+            # process the file
+            output = process_image_from_file(filename, folder=app.config['UPLOAD_FOLDER'])
 
             # print output
-            return render_template('index.html', file_output=clean(output))
+            return render_template('index.html', file_output=output)
         else:
             return internal_error('only jpg pls')
 

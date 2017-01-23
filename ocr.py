@@ -19,10 +19,15 @@ def clean(str):
 # def process_image_from_path(path):
 #     return img2str(path)
 
-def process_image_from_file(file):
-    image = Image.open(file)
-    image.filter(ImageFilter.SHARPEN)
-    return pytesseract.image_to_string(image)
+def process_image_from_file(filename, folder='uploads'):
+    circle = rgb2circle(filename, folder)
+    binary = circle2img(circle)
+    string = ""
+    for file in binary:
+        string += clean(img2str(file))
+    return string
+
+
 
 def rgb2circle(filename, folder):
     """
@@ -33,21 +38,21 @@ def rgb2circle(filename, folder):
     eng = matlab.engine.start_matlab()
     return eng.circle_crop(folder+'/'+filename)
 
-def circle2img(filename, folder):
+def circle2img(filename):
     """
     II step: text detection and localization
     :param filename: str (only) filename
     :return: list[str]
     """
-    output_list = circle2binary(filename, drive=folder)
+    output_list = circle2binary(filename)
     return output_list
 
 
-def img2str(filename, drive):
+def img2str(filename):
     """
     III step: turn text image part into text via OCR API
     :param path: str
     :return: str, recognized text
     """
-    cmd = 'tesseract ' + drive+'/'+filename + ' stdout -l eng -psm 7 -c tessedit_char_whitelist=0123456789ABCDEFGHIJLMNPQRSTUVWXYZ'
+    cmd = 'tesseract ' + filename + ' stdout -l eng -psm 7 -c tessedit_char_whitelist=0123456789ABCDEFGHIJLMNPQRSTUVWXYZ'
     return sp.check_output(cmd, shell=True)
